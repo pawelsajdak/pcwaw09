@@ -26,7 +26,6 @@
 #include "TH2D.h"
 #include "TFile.h"
 #include "TMath.h"
-#include "TNtupleD.h"
 #include <Math/Vector4D.h>
 
 #include <sstream>
@@ -41,7 +40,6 @@ double protonMass = 0.938272;
 double lambdaMass = 1.115683;
 double phiMass = 1.019461;
 double psi2SMass = 3.686097;
-double B0sMass = 5.3669;
 
 template <typename T> T sqr(T v) { return v*v; }
 
@@ -73,7 +71,7 @@ private:
   edm::ParameterSet theConfig;
   bool debug;
   unsigned int theEventCount;
-  TNtupleD *tupKK, *tupPP;
+  TH1D *histoK_loose, *histoK_tight;
 
   edm::EDGetTokenT< vector<pat::Muon> > theMuonToken;
   edm::EDGetTokenT< vector<pat::PackedCandidate> > theCandidateToken;
@@ -98,10 +96,10 @@ Analysis::~Analysis()
 
 void Analysis::beginJob()
 {
-  //create tuples
-  tupKK = new TNtupleD("tupKK","K+K- from Jpsi peak","mJKK:mKK");
-  tupPP = new TNtupleD("tupPP","pi+pi- from Jpsi peak","mJPP:mPP");
-
+  //create a histogram
+  histoK_loose =new TH1D("histoK_loose","Jpsi+kaon dM<0.1; Minv; #events",10000,3.5,6.0);
+  histoK_tight =new TH1D("histoK_tight","Jpsi+kaon dM<0.05; Minv; #events",10000,3.5,6.0);
+  
   cout << "HERE Analysis::beginJob()" << endl;
 }
 
@@ -109,14 +107,15 @@ void Analysis::endJob()
 {
   //make a new Root file
   TFile myRootFile( theConfig.getParameter<std::string>("outHist").c_str(), "RECREATE");
-  //write data
-  tupKK->Write();
-  tupPP->Write();  
+  //write histogram data
+  histoK_loose->Write();
+  histoK_tight->Write();
+
 
   myRootFile.Close();
-  delete tupKK;
-  delete tupPP;
-  
+  delete histoK_loose;
+  delete histoK_tight;
+ 
   cout << "HERE Cwiczenie::endJob()" << endl;
 }
 
@@ -150,7 +149,8 @@ void Analysis::analyze(const edm::Event& ev, const edm::EventSetup& es)
 
       ROOT::Math::PxPyPzEVector lMuonsVector = muon.p4()+muon2.p4();
       //Minv of two muons close to the J/psi peak
-      if(fabs(lMuonsVector.M()-jpsiMass)>0.1) continue;
+      double muons_Jpsi_massDifference = fabs(lMuonsVector.M()-jpsiMass);
+      if(muons_Jpsi_massDifference > 0.1) continue;
 
       // Could the two muons have a common vertex - vjp?
       std::vector<reco::TransientTrack> trackTTs;
@@ -174,18 +174,19 @@ void Analysis::analyze(const edm::Event& ev, const edm::EventSetup& es)
       } 
       lMuonsVector = lorentzVector((mom1+mom2)*alpha, jpsiMass);
 
-      
 
 
-      /////////////FIRST PACKED CANDIDATE///////////
+
       for (std::vector<pat::PackedCandidate>::const_iterator ic1 = candidates.begin(); ic1 < candidates.end(); ic1++) 
       {
         if(abs(ic1->pdgId()) != 211 || !ic1->hasTrackDetails() || ic1->pt() < 2. || ic1->charge()==0) continue;
         
-        // Could J/psi and the candidate (kaon,pion,proton) come from a common vertex - vBX?
+        // Could J/psi and the candidate (kaon) come from a common vertex - vBX?
         const reco::Track & trk1 = ic1->pseudoTrack();
-        if (fabs(vjp.position().z()- trk1.vz())>0.3)continue;
+        if (fabs(vjp.position().z()- trk1.vz())>0.3)    continue;
         trackTTs.push_back(trackBuilder.build(trk1));
+        
+        
         reco::Vertex vBX(TransientVertex(kvf.vertex(trackTTs)));
         double probvBX = TMath::Prob(vBX.chi2(),vBX.ndof());
         trackTTs.pop_back();  
@@ -194,47 +195,13 @@ void Analysis::analyze(const edm::Event& ev, const edm::EventSetup& es)
         // deltaR check
         if(std::min(deltaR(trk1,*mu1Ref),deltaR(trk1,*mu2Ref))<0.0003) continue;
 
-        ///////////SECOND PACKED CANDIDATE///////////////
-        trackTTs.push_back(trackBuilder.build(trk1)); // was removed, now added again
-        math::XYZVector cand1Mom = ic1->momentum();
-        for (std::vector<pat::PackedCandidate>::const_iterator ic2 = ic1+1; ic2 < candidates.end(); ic2++) 
-        {
-          if(abs(ic2->pdgId()) != 211 || !ic2->hasTrackDetails() || ic2->pt() < 2. || ic2->charge()*ic1->charge() !=-1) continue;
-
-          // Could J/psi and both candidates come from a common vertex - vJXX?
-          const reco::Track & trk2 = ic2->pseudoTrack();
-          if (fabs(vBX.position().z()- trk2.vz())>0.3)continue;
-          
-          trackTTs.push_back(trackBuilder.build(trk2));
-          reco::Vertex vJXX(TransientVertex(kvf.vertex(trackTTs)));
-          double probvJXX = TMath::Prob(vJXX.chi2(),vJXX.ndof());
-          trackTTs.pop_back();  
-          if (probvJXX<0.15) continue;
-
-          // deltaR check
-          if(std::min(deltaR(trk2,*mu1Ref),deltaR(trk2,*mu2Ref))<0.0003) continue;
-
-          // HISTOGRAMS
-          math::XYZVector cand2Mom = ic2->momentum();
-
-          // two Kaons
-          ROOT::Math::PxPyPzEVector lVectorKK = lorentzVector(cand1Mom, kaonMass)+lorentzVector(cand2Mom,kaonMass);
-          ROOT::Math::PxPyPzEVector lVectorJKK = lMuonsVector + lVectorKK;
-          double mJKK = lVectorJKK.M();
-          if(mJKK<5.1 || mJKK>5.8) continue;
-          tupKK->Fill(mJKK,lVectorKK.M());
-          
-          // two Pions
-          ROOT::Math::PxPyPzEVector lVectorPP = lorentzVector(cand1Mom, pionMass)+lorentzVector(cand2Mom,pionMass);
-          ROOT::Math::PxPyPzEVector lVectorJPP = lMuonsVector + lVectorPP;
-          double mJPP = lVectorJPP.M();
-          if(mJPP<4.8 || mJPP>5.5) continue;
-          tupPP->Fill(mJPP,lVectorPP.M());
-
-        }
-        trackTTs.pop_back();  // removes trk1
-        ///////////////////////
-
+        // Kaon
+        math::XYZVector candMom = ic1->momentum();
+        ROOT::Math::PxPyPzEVector lFullVectorK = lMuonsVector+lorentzVector(candMom, kaonMass);
+        histoK_loose->Fill(lFullVectorK.M());
+        if(muons_Jpsi_massDifference < 0.05)  histoK_tight->Fill(lFullVectorK.M());  
+        
+        
       }  
     }
   } 

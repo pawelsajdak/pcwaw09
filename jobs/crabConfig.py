@@ -4,8 +4,8 @@ config = Configuration()
 config.section_("General")
 #config.General.requestName = setEra+setType 
 #config.General.workArea = setType+setId+'_jobVer'+jobVer
-config.General.workArea = 'qqq3'
-config.General.requestName = 'hhhhhh2'
+config.General.workArea = 'Jpsi_K'
+config.General.requestName = 'full0_corrName'
 config.General.transferLogs = True 
 config.General.transferOutputs = True 
 
@@ -26,17 +26,17 @@ config.Data.inputDBS = 'global'
 config.Data.splitting = 'LumiBased'
 #config.Data.splitting = 'Automatic'
 #config.Data.splitting = 'EventAwareLumiBased'
-config.Data.unitsPerJob = 100 #number of files per jobs
+config.Data.unitsPerJob = 500 #number of files per jobs
 config.Data.totalUnits =  -1 #number of event
 #config.Data.outLFNDirBase = '/store/user/konec/crabout/'
 config.Data.outLFNDirBase = '/store/user/psajdak/crab_out/'
-config.Data.outputDatasetTag = 'qq3'
+config.Data.outputDatasetTag = 'Jpsi_K_0_corrName'
 
 config.section_("JobType")
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'analysis_cwPS.py'
 #config.JobType.disableAutomaticOutputCollection = True
-config.JobType.outputFiles = ['XX_B0s_test.root']
+config.JobType.outputFiles = ['Jpsi_K.root']
 
 config.section_("Site")
 #config.Site.whitelist = ['T3_CH_CERNCAF']
