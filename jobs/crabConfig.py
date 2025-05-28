@@ -5,7 +5,7 @@ config.section_("General")
 #config.General.requestName = setEra+setType 
 #config.General.workArea = setType+setId+'_jobVer'+jobVer
 config.General.workArea = 'Jpsi_K'
-config.General.requestName = 'full1'
+config.General.requestName = 'full1_v2'
 config.General.transferLogs = True 
 config.General.transferOutputs = True 
 
@@ -30,7 +30,7 @@ config.Data.unitsPerJob = 100 #number of files per jobs
 config.Data.totalUnits =  -1 #number of event
 #config.Data.outLFNDirBase = '/store/user/konec/crabout/'
 config.Data.outLFNDirBase = '/store/user/psajdak/crab_out/'
-config.Data.outputDatasetTag = 'Jpsi_K_1'
+config.Data.outputDatasetTag = 'full1_v2'
 
 config.section_("JobType")
 config.JobType.pluginName = 'Analysis'
