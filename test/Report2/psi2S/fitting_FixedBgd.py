@@ -2,8 +2,8 @@
 import ROOT as r
 import sys
 
-histname = "histoK"
-xmin = 4.8
+histname = "histoPi"
+xmin = 4.7
 xmax = 6.0
 ##########################################
 histfilename = "psi2S.root"
@@ -11,6 +11,9 @@ histfile = r.TFile.Open(histfilename,"READ")
 histo = histfile.Get(histname)
 histo.SetDirectory(0)
 histfile.Close()
+rbhisto = histo.Rebin(2,"rbhisto")
+
+
 
 # Background function with fitted parameters
 bgdfilename = histname+"_bgdFunc.root"
@@ -25,7 +28,7 @@ fitFunc.SetParameter(0,bgd.GetParameter(0))
 fitFunc.SetParameter(1,bgd.GetParameter(1))
 fitFunc.SetParameter(2,bgd.GetParameter(2))
 
-results = histo.Fit(fitFunc,"ERSLB")
+results = rbhisto.Fit(fitFunc,"ERSLB")
 
 #'''
 funcFile = r.TFile.Open(histname+"_fitFunc.root","UPDATE")
@@ -40,12 +43,12 @@ canvas = r.TCanvas("canvas")
 canvas.cd()
 #canvas.SetLogy(True)
 
-histo.SetAxisRange(4.0,7.0)
-#histo.SetAxisRange(3.5, 6., "X")
-#histo.SetAxisRange(1500, 3.e3, "Y")
-#histo.SetTitle("Lifetime of B^{#pm};t;Counts")
-histo.SetStats(0)
-histo.Draw("h")
+rbhisto.SetAxisRange(4.0,7.0)
+#rbhisto.SetAxisRange(3.5, 6., "X")
+#rbhisto.SetAxisRange(1500, 3.e3, "Y")
+#rbhisto.SetTitle("Lifetime of B^{#pm};t;Counts")
+rbhisto.SetStats(0)
+rbhisto.Draw("h")
 fitFunc.Draw("same")
 
 

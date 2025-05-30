@@ -3,7 +3,7 @@ import ROOT as r
 import sys
 import numpy as np
 
-histname = "histoK"
+histname = "histoPi"
 
 class Background:
     def __call__(self, arr,par):
@@ -18,20 +18,21 @@ histfile = r.TFile.Open(histfilename,"READ")
 histo = histfile.Get(histname)
 histo.SetDirectory(0)
 histfile.Close()
+rbhisto = histo.Rebin(2,"rbhisto")
 
-xmin = 4.8
+xmin = 4.7
 xmax = 6.0
 axmin = 4.0
 axmax = 7.0
 
 fitRange = r.Fit.DataRange()
-fitRange.AddRange(xmin,5.15)
+fitRange.AddRange(xmin,4.9)
 fitRange.AddRange(5.4,xmax)
 b = Background()
 fitFunc = r.TF1("fitFunc",b,xmin,xmax,3)
 #fitFunc.SetParameters(-4750.,0.32,6180.)
 
-results = histo.Fit(fitFunc,"ERSL")
+results = rbhisto.Fit(fitFunc,"ERSL")
 
 outname = histname+"_bgd"
 #'''
@@ -45,14 +46,14 @@ with open(outname+'Fit.txt','a') as of:
 
 canvas = r.TCanvas("canvas")
 canvas.cd()
-#canvas.SetLogy(True)
+canvas.SetLogy(True)
 
-histo.SetAxisRange(axmin,axmax)
-#histo.SetAxisRange(xmin-0.1, xmax+0.1, "X")
-#histo.SetAxisRange(2.e3, 7.e3, "Y")
-#histo.SetTitle(peakname+"\t {:.3f}".format(fitFunc.GetParameter(1))+"; Minv; #events")
-histo.SetStats(0)
-histo.Draw("h")
+rbhisto.SetAxisRange(axmin,axmax)
+#rbhisto.SetAxisRange(xmin-0.1, xmax+0.1, "X")
+#rbhisto.SetAxisRange(2.e3, 7.e3, "Y")
+#rbhisto.SetTitle(peakname+"\t {:.3f}".format(fitFunc.GetParameter(1))+"; Minv; #events")
+rbhisto.SetStats(0)
+rbhisto.Draw("h")
 
 
 canvas.Print(outname+".pdf")
