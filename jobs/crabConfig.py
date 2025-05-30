@@ -5,13 +5,13 @@ config.section_("General")
 #config.General.requestName = setEra+setType 
 #config.General.workArea = setType+setId+'_jobVer'+jobVer
 config.General.workArea = 'Jpsi_K'
-config.General.requestName = 'full2'
+config.General.requestName = 'full7'
 config.General.transferLogs = True 
 config.General.transferOutputs = True 
 
 config.section_("Data")
 
-config.Data.inputDataset = '/ParkingDoubleMuonLowMass2/Run2024F-PromptReco-v1/MINIAOD'
+config.Data.inputDataset = '/ParkingDoubleMuonLowMass7/Run2024F-PromptReco-v1/MINIAOD'
 config.Data.lumiMask= '2024F_Golden.json'
 #config.Data.lumiMask='Cert_Collisions2022_eraG_362433_362760_Golden.json'
 #config.Data.lumiMask='Cert_Collisions2022_eraD_357538_357900_Golden.json'
@@ -30,7 +30,7 @@ config.Data.unitsPerJob = 100 #number of files per jobs
 config.Data.totalUnits =  -1 #number of event
 #config.Data.outLFNDirBase = '/store/user/konec/crabout/'
 config.Data.outLFNDirBase = '/store/user/psajdak/crab_out/'
-config.Data.outputDatasetTag = 'full2'
+config.Data.outputDatasetTag = 'full7'
 
 config.section_("JobType")
 config.JobType.pluginName = 'Analysis'
