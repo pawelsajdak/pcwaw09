@@ -13,7 +13,7 @@ histo.SetDirectory(0)
 histfile.Close()
 
 # Background function with fitted parameters
-bgdfilename = histname+"_bgdFunc.root"
+bgdfilename = "./histoPi20/"+histname+"_bgdFunc.root"
 bgdfile = r.TFile.Open(bgdfilename)
 bgd = bgdfile.Get("bgd")
 
@@ -21,20 +21,20 @@ bgd = bgdfile.Get("bgd")
 expression = "[0]+[1]*x+[2]*x*x + [3]*exp((-(x-[4])**2)/(2*[5]**2))"# + [6]*exp((-(x-[7])**2)/(2*[8]**2))"
 fitFunc = r.TF1("fitFunc",expression,xmin,xmax,6)
 fitFunc.SetParameters(1.,1.,1.,1000.,5.15,0.1)
-fitFunc.FixParameter(0,bgd.GetParameter(0))
-fitFunc.FixParameter(1,bgd.GetParameter(1))
-fitFunc.FixParameter(2,bgd.GetParameter(2))
+fitFunc.SetParameter(0,bgd.GetParameter(0))
+fitFunc.SetParameter(1,bgd.GetParameter(1))
+fitFunc.SetParameter(2,bgd.GetParameter(2))
 
 results = histo.Fit(fitFunc,"ERSLB")
 
-'''
+#'''
 funcFile = r.TFile.Open(histname+"_fitFunc.root","UPDATE")
 fitFunc.Write()
 funcFile.Close()
 
 with open(histname+'_fitResults.txt','a') as of:
     print(results, file=of)
-'''
+#'''
     
 canvas = r.TCanvas("canvas")
 canvas.cd()
