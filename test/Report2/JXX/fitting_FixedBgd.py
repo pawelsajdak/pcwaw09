@@ -2,7 +2,7 @@
 import ROOT as r
 import sys
 
-histname = "histoPi20"
+histname = "histoK10"
 xmin = 4.6
 xmax = 5.8
 ##########################################
@@ -13,7 +13,7 @@ histo.SetDirectory(0)
 histfile.Close()
 
 # Background function with fitted parameters
-bgdfilename = "./histoPi20/"+histname+"_bgdFunc.root"
+bgdfilename = "./histoK10/"+histname+"_bgdFunc.root"
 bgdfile = r.TFile.Open(bgdfilename)
 bgd = bgdfile.Get("bgd")
 
@@ -40,7 +40,7 @@ canvas = r.TCanvas("canvas")
 canvas.cd()
 #canvas.SetLogy(True)
 
-histo.SetAxisRange(4.0,7.0)
+histo.SetAxisRange(4.5,6.2)
 #histo.SetAxisRange(3.5, 6., "X")
 #histo.SetAxisRange(1500, 3.e3, "Y")
 #histo.SetTitle("Lifetime of B^{#pm};t;Counts")
