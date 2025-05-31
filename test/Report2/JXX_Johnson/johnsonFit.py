@@ -43,7 +43,7 @@ fitFunc.SetParameter(6,bgd.GetParameter(2))
 #'''
 results = histo.Fit(fitFunc,"ERSLB")
 funcFile = r.TFile.Open(peakname+"_fitFunc.root","RECREATE")
-fitFunc.Write()
+#fitFunc.Write()
 funcFile.Close()
 
 with open(peakname+'_FitResults.txt','a') as of:
