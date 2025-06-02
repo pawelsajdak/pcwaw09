@@ -2,9 +2,9 @@
 import ROOT as r
 import sys
 
-histname = "histoK10"
+histname = "histoK_tight"
 
-histfilename = "rebinJXnewdR.root"
+histfilename = "Jpsi_K_full2024F.root"
 histfile = r.TFile.Open(histfilename,"READ")
 histo = histfile.Get(histname)
 histo.SetDirectory(0)
@@ -19,10 +19,11 @@ canvas.SetRightMargin(0.08)
 #canvas.SetTopMargin(0.2)
 #canvas.SetLogy(True)
 
-
-histo.SetAxisRange(4.2,5.5, "X")
-print(histo.Integral())
-#histo.SetAxisRange(1900, 8.e3, "Y")
+#histo.SetAxisRange(4.2,5.5)
+#print(histo.Integral())
+histo.SetAxisRange(3.75,5.9, "X")
+#print(histo.Integral())
+histo.SetAxisRange(7000.,25.e3, "Y")
 histo.SetTitle("J/#psi + K^{ #pm}; M_{ inv} (GeV); Counts")
 histo.SetStats(0)
 
@@ -50,12 +51,12 @@ Bfunc.Draw("same")
 
 
 # Background line
-bgdfilename = histname+"hill"+"_bgdFunc.root"
+bgdfilename = histname+"_hill"+"_bgdFunc.root"
 bgdfile = r.TFile.Open(bgdfilename)
 bgd = r.gROOT.FindObject("bgd")
 bgdparams = bgd.GetParameters()
 expression = "[0]+[1]*exp([2]*x)"
-bgdDrawFunc = r.TF1("bgdDrawFunc",expression,4.4,5.0,3)
+bgdDrawFunc = r.TF1("bgdDrawFunc",expression,3.8,5.8,3)
 bgdDrawFunc.SetParameters(bgdparams)
 
 canvas.cd()
@@ -69,15 +70,15 @@ leg.AddEntry("bgdDrawFunc","exponential background","l")
 leg.Draw()
 
 
-
+'''
 l = r.TLatex()
 l.SetTextFont(42)
 l.SetTextSize(0.06)
 l.DrawLatex(5.25,3400.,"B^{ #pm}")
 l.SetTextSize(0.035)
 #l.DrawLatex(5.4,5300.,"|#it{M_{#mu#mu} - m_{J/#psi}}| < 0.1 GeV")
+'''
 
 
-
-canvas.Print(histname+"hill"+"_finePlot.pdf")
+canvas.Print(histname+"_hill"+"_finePlot.pdf")
 input('press enter to exit')
