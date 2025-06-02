@@ -3,7 +3,7 @@ import ROOT as r
 import sys
 
 histname = "histoK10"
-xmin = 4.6
+xmin = 4.8
 xmax = 5.8
 ##########################################
 histfilename = "rebin3partMinv.root"
@@ -24,6 +24,7 @@ fitFunc.SetParameters(1.,1.,1.,1000.,5.15,0.1)
 fitFunc.SetParameter(0,bgd.GetParameter(0))
 fitFunc.SetParameter(1,bgd.GetParameter(1))
 fitFunc.SetParameter(2,bgd.GetParameter(2))
+fitFunc.FixParameter(4,5.36693)
 
 results = histo.Fit(fitFunc,"ERSLB")
 
