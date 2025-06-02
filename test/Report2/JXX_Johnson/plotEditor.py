@@ -25,7 +25,7 @@ canvas.SetRightMargin(0.08)
 
 histo.SetAxisRange(4.5,6.2, "X")
 #histo.SetAxisRange(1900, 8.e3, "Y")
-histo.SetTitle("J/#psi + K^{+}K^{-}  (Gauss); M_{ J/#psi K^{+}K^{-}} (GeV); Counts")
+histo.SetTitle("J/#psi + K^{+}K^{-}  (Johnson); M_{ J/#psi K^{+}K^{-}} (GeV); Counts")
 histo.SetStats(0)
 
 r.gStyle.SetTitleFontSize(0.06)
@@ -41,7 +41,7 @@ histo.SetFillColor(19)
 histo.Draw("h")
 
 #'''
-funcfilename = histname+"_fitFunc.root"
+funcfilename = "Jpsi_KK__Bpm_fitFunc.root"
 funcfile = r.TFile.Open(funcfilename,"READ")
 fitFunc = r.gROOT.FindObject("fitFunc")
 fitFunc.SetRange(4.8,5.8)
@@ -58,7 +58,7 @@ l.SetTextSize(0.04)
 #l.SetTextAlign(31)
 #l.DrawLatex(1.06,220.,"#cbar M_{ J/#psiK^{+}K^{-}} - m_{ B^{0}_{s}} #cbar < 0.12 GeV")
 l.DrawLatex(5.42,2500.,"prob. of common vertex > 0.15")
-l.DrawLatex(5.6,1800.,"#splitline{m = (5384.8 #pm 1.8) MeV}{#sigma = (50.8 #pm 1.9) MeV}")
+#l.DrawLatex(5.6,1800.,"#splitline{m = (5384.8 #pm 1.8) MeV}{#sigma = (50.8 #pm 1.9) MeV}")
 
-canvas.Print(histname+"_finePlot.pdf")
+canvas.Print("Jpsi_KK__Bpm_finePlot.pdf")
 input('press enter to exit')
