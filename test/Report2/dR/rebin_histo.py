@@ -3,7 +3,7 @@ import ROOT as r
 import sys
 
 histname = "histodR"
-nbins = 1
+nbins = 10
 
 ##########################################
 histfilename = "dRdistribution.root"
@@ -25,9 +25,9 @@ canvas = r.TCanvas("canvas")
 canvas.cd()
 #canvas.SetLogy(True)
 
-rbhisto.SetAxisRange(0.0,0.01)
+#rbhisto.SetAxisRange(0.01,0.1)
 #histo.SetAxisRange(3.5, 6., "X")
-rbhisto.SetAxisRange(0.0,50.0, "Y")
+rbhisto.SetAxisRange(0.0,20., "Y")
 #histo.SetTitle("Lifetime of B^{#pm};t [cm/c];Counts")
 #histo.SetStats(0)
 rbhisto.Draw("h")
