@@ -193,7 +193,7 @@ void Analysis::analyze(const edm::Event& ev, const edm::EventSetup& es)
         if (probvBX<0.15) continue;
 
         // deltaR check
-        if(std::min(deltaR(trk1,*mu1Ref),deltaR(trk1,*mu2Ref))<0.0003) continue;
+        if(std::min(deltaR(trk1,*mu1Ref),deltaR(trk1,*mu2Ref))<0.1) continue;
 
         // Kaon
         math::XYZVector candMom = ic1->momentum();
