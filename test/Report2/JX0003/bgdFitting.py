@@ -3,7 +3,7 @@ import ROOT as r
 import sys
 import numpy as np
 
-histname = "histoK_tight"
+histname = "histoK_tight_NEW"
 
 class Background:
     def __call__(self, arr,par):
@@ -13,9 +13,9 @@ class Background:
             r.TF1.RejectPoint()
             return 0.0
 ##########################################
-histfilename = "Jpsi_K_full2024F"
+histfilename = "Jpsi_K_newdR"
 histfile = r.TFile.Open(histfilename+".root","READ")
-histo = histfile.Get(histname)
+histo = histfile.Get("histoK_tight")
 histo.SetDirectory(0)
 histfile.Close()
 

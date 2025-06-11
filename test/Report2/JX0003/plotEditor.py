@@ -2,11 +2,11 @@
 import ROOT as r
 import sys
 
-histname = "histoK_tight"
+histname = "histoK_tight_NEW"
 
-histfilename = "Jpsi_K_full2024F.root"
+histfilename = "Jpsi_K_newdR.root"
 histfile = r.TFile.Open(histfilename,"READ")
-histo = histfile.Get(histname)
+histo = histfile.Get("histoK_tight")
 histo.SetDirectory(0)
 histfile.Close()
 
@@ -24,7 +24,7 @@ canvas.SetRightMargin(0.08)
 histo.SetAxisRange(3.75,5.9, "X")
 #print(histo.Integral())
 histo.SetAxisRange(7000.,25.e3, "Y")
-histo.SetTitle("J/#psi + K^{ #pm}; M_{ inv} (GeV); Counts")
+histo.SetTitle("J/#psi + K^{ #pm}  (#DeltaR > 0.1); M_{ inv} (GeV); Counts")
 histo.SetStats(0)
 
 r.gStyle.SetTitleFontSize(0.06)
