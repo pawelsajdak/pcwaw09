@@ -2,7 +2,7 @@
 import ROOT as r
 import sys
 
-histname = "histoK10"
+histname = "histoPi20"
 
 histfilename = "rebin3partMinv.root"
 histfile = r.TFile.Open(histfilename,"READ")
@@ -25,7 +25,7 @@ canvas.SetRightMargin(0.08)
 
 histo.SetAxisRange(4.5,6.2, "X")
 #histo.SetAxisRange(1900, 8.e3, "Y")
-histo.SetTitle("J/#psi + K^{+}K^{-}  (Gauss)  #mu fixed to B^{0}_{s} mass; M_{ J/#psi K^{+}K^{-}} (GeV); Counts")
+histo.SetTitle("J/#psi + #pi^{+}#pi^{-}; M_{ J/#psi #pi^{+}#pi^{-}} (GeV); Counts")
 histo.SetStats(0)
 
 r.gStyle.SetTitleFontSize(0.06)
@@ -44,7 +44,7 @@ histo.Draw("h")
 funcfilename = histname+"_fitFunc.root"
 funcfile = r.TFile.Open(funcfilename,"READ")
 fitFunc = r.gROOT.FindObject("fitFunc")
-fitFunc.SetRange(4.8,5.8)
+fitFunc.SetRange(4.6,5.6)
 
 canvas.cd()
 #fitFunc.SetLineColor(3)
@@ -57,8 +57,8 @@ l.SetTextFont(42)
 l.SetTextSize(0.04)
 #l.SetTextAlign(31)
 #l.DrawLatex(1.06,220.,"#cbar M_{ J/#psiK^{+}K^{-}} - m_{ B^{0}_{s}} #cbar < 0.12 GeV")
-l.DrawLatex(5.42,2500.,"prob. of common vertex > 0.15")
-#l.DrawLatex(5.6,1800.,"#splitline{m = (5385.8 #pm 1.8) MeV}{#sigma = (54.5 #pm 2.0) MeV}")
+l.DrawLatex(5.42,3600.,"prob. of common vertex > 0.15")
+l.DrawLatex(5.4,3000.,"#splitline{m = (5156.9 #pm 1.9) MeV}{#sigma = (58.5 #pm 2.0) MeV}")
 
 canvas.Print(histname+"_fixed_finePlot.pdf")
 input('press enter to exit')
