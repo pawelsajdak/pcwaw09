@@ -1,0 +1,5 @@
+.vscode/
+jobs/
+!jobs/analysis_cwPS.py
+!jobs/crabConfig.py
+!jobs/crab.log
